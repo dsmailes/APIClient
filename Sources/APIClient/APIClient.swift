@@ -9,21 +9,7 @@ public protocol APIClientProtocol {
     func fetch<T: Codable>(type: T.Type, endpoint: EndPointProtocol) async throws -> T
 }
 
-public final class DefaultAPIClient: APIClientProtocol {
-    
-    public let baseUrl: String
-    public let client: AuthenticationClientProtocol
-    public let session: URLSession
-    
-    public init(
-        baseUrl: String,
-        client: AuthenticationClientProtocol,
-        session: URLSession
-    ) {
-        self.baseUrl = baseUrl
-        self.client = client
-        self.session = session
-    }
+extension APIClientProtocol {
     
     public func fetch<T: Codable>(
         type: T.Type,
