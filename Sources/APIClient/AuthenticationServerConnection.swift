@@ -16,7 +16,7 @@ public protocol AuthenticationServerConnectionProtocol {
 }
 
 extension AuthenticationClientProtocol {
-    func getAuthenticationToken() async throws -> OAuthAccessToken {
+    public func getAuthenticationToken() async throws -> OAuthAccessToken {
         return OAuthAccessToken(token: "")
     }
 }

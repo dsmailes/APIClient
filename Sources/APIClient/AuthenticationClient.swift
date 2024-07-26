@@ -17,15 +17,13 @@ public protocol AuthenticationClientProtocol {
 
 public final class DefaultAuthenticationClient: AuthenticationClientProtocol {
     
-    internal var keychainInteractor: KeychainInteractor
-    private let authenticationServer: AuthenticationServerConnectionProtocol
+    private let keychainInteractor = DefaultKeychainInteractor()
+    let authenticationServer: AuthenticationServerConnectionProtocol
     
-    init(
-        authenticationServer: AuthenticationServerConnectionProtocol,
-        keychainInteractor: KeychainInteractor
+    public init(
+        authenticationServer: AuthenticationServerConnectionProtocol
     ) {
         self.authenticationServer = authenticationServer
-        self.keychainInteractor = keychainInteractor
     }
     
     public func fetchStoredToken() async throws -> OAuthAccessToken {

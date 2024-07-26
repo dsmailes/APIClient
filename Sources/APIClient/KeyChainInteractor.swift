@@ -8,7 +8,7 @@
 import Foundation
 import Security
 
-protocol KeychainInteractor {
+public protocol KeychainInteractor {
     func add<T: Codable> (_ value: T, withKey key: String) throws
     func update<T: Codable> (_ value: T, withKey key: String) -> Bool
     func remove (withKey key: String) -> Bool
