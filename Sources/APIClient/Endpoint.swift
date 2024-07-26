@@ -7,7 +7,7 @@
 
 import Foundation
 
-protocol EndPointProtocol {
+public protocol EndPointProtocol {
     var urlSuffix: String { get }
     var httpMethod: String { get }
 }

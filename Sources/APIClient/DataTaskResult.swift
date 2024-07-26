@@ -7,4 +7,4 @@
 
 import Foundation
 
-typealias DataTaskResult = (data: Data?, urlResponse: URLResponse?)
+public typealias DataTaskResult = (data: Data?, urlResponse: URLResponse?)
