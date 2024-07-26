@@ -9,4 +9,8 @@ import Foundation
 
 public struct OAuthAccessToken: Codable {
     public var token: String
+    
+    public init(token: String) {
+        self.token = token
+    }
 }
