@@ -6,3 +6,13 @@
 //
 
 import Foundation
+
+protocol URLSessionProtocol {
+    func dataTaskWithURL(_ request: URLRequest) async throws -> DataTaskResult
+}
+
+extension URLSession: URLSessionProtocol {
+    func dataTaskWithURL(_ request: URLRequest) async throws -> DataTaskResult {
+        try await self.data(for: request)
+    }
+}
