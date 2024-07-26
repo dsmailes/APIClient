@@ -7,7 +7,7 @@
 
 import Foundation
 
-protocol AuthenticationServerConnectionProtocol {
+public protocol AuthenticationServerConnectionProtocol {
     var serverURL: URL { get }
     var clientID: String { get }
     var clientSecret: String { get }
