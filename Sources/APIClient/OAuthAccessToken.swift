@@ -8,5 +8,5 @@
 import Foundation
 
 public struct OAuthAccessToken: Codable {
-    public let token: String
+    public var token: String
 }
