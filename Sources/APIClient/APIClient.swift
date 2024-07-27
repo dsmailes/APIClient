@@ -8,7 +8,7 @@ public protocol APIClientProtocol {
     var session: URLSession { get }
     
     func fetch<T: Codable>(type: T.Type, endpoint: EndPointProtocol) async throws -> T
-    func fetch<T: Codable>(type: T.Type, endpoint: EndPointProtocol) -> Single<T>
+    func fetch<T: Codable>(type: T.Type, endpoint: EndPointProtocol) -> Observable<T>
 }
 
 extension APIClientProtocol {
