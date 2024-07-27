@@ -11,6 +11,6 @@ public protocol AuthenticationClientProtocol {
     
     func authenticateRequest(_ request: URLRequest) throws -> URLRequest
     func requestToken() async throws
-    func fetchStoredToken() async throws -> OAuthAccessToken
+    func fetchStoredToken() throws -> OAuthAccessToken
     
 }
