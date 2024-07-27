@@ -41,11 +41,11 @@ extension APIClientProtocol {
         }
     }
     
-    public func fetch<T: Codable>(type: T.Type, endpoint: EndPointProtocol) -> Single<T> {
-        return Single<T>.create { single in
+    public func fetch<T: Codable>(type: T.Type, endpoint: EndPointProtocol) -> Observable<T> {
+        return Observable<T>.create { observer in
             
             guard let url = URL(string: baseUrl.appending(endpoint.urlSuffix)) else {
-                single(.failure(APIError.invalidConfiguration))
+                observer.onError(APIError.invalidConfiguration)
                 return Disposables.create()
             }
             
@@ -60,31 +60,31 @@ extension APIClientProtocol {
                     
                     guard let httpResponse = response as? HTTPURLResponse
                     else {
-                        single(.failure(APIError.requestFailed(description: "Invalid response.")))
+                        observer.onError(APIError.requestFailed(description: "Invalid response."))
                         return
                     }
                     
                     guard 200..<300 ~= httpResponse.statusCode
                     else {
-                        single(.failure(APIError.requestFailed(description: "Failed with status \(httpResponse.statusCode)")))
+                        observer.onError(APIError.requestFailed(description: "Failed with status \(httpResponse.statusCode)"))
                         return
                     }
                     
                     if let error {
-                        single(.failure(error))
+                        observer.onError(error)
                     }
                     
                     guard let data
                     else {
-                        single(.failure(APIError.requestFailed(description: "Invalid response.")))
+                        observer.onError(APIError.requestFailed(description: "Invalid response."))
                         return
                     }
                     
                     do {
                         let model = try JSONDecoder().decode(T.self, from: data)
-                        single(.success(model))
+                        observer.onNext(model)
                     } catch {
-                        single(.failure(APIError.decodingFailure))
+                        observer.onError(APIError.decodingFailure)
                     }
                 }
                 
@@ -94,7 +94,7 @@ extension APIClientProtocol {
                     task.cancel()
                 }
             } catch {
-                single(.failure(error))
+                observer.onError(error)
                 return Disposables.create()
             }
         }
