@@ -43,6 +43,7 @@ extension APIClientProtocol {
     
     public func fetch<T: Codable>(type: T.Type, endpoint: EndPointProtocol) -> Single<T> {
         return Single<T>.create { single in
+            
             guard let url = URL(string: baseUrl.appending(endpoint.urlSuffix)) else {
                 single(.failure(APIError.invalidConfiguration))
                 return Disposables.create()
@@ -55,20 +56,35 @@ extension APIClientProtocol {
             do {
                 let authenticatedRequest = try client.authenticateRequest(request)
                 
-                let task = URLSession.shared.dataTask(with: authenticatedRequest) { data, response, error in
-                    if let error = error {
-                        single(.failure(error))
-                    } else if let data = data, 
-                              let response = response as? HTTPURLResponse, 
-                              200..<300 ~= response.statusCode {
-                        do {
-                            let model = try JSONDecoder().decode(T.self, from: data)
-                            single(.success(model))
-                        } catch {
-                            single(.failure(APIError.decodingFailure))
-                        }
-                    } else {
+                let task = session.dataTask(with: authenticatedRequest) { data, response, error in
+                    
+                    guard let httpResponse = response as? HTTPURLResponse
+                    else {
                         single(.failure(APIError.requestFailed(description: "Invalid response.")))
+                        return
+                    }
+                    
+                    guard 200..<300 ~= httpResponse.statusCode
+                    else {
+                        single(.failure(APIError.requestFailed(description: "Failed with status \(httpResponse.statusCode)")))
+                        return
+                    }
+                    
+                    if let error {
+                        single(.failure(error))
+                    }
+                    
+                    guard let data
+                    else {
+                        single(.failure(APIError.requestFailed(description: "Invalid response.")))
+                        return
+                    }
+                    
+                    do {
+                        let model = try JSONDecoder().decode(T.self, from: data)
+                        single(.success(model))
+                    } catch {
+                        single(.failure(APIError.decodingFailure))
                     }
                 }
                 
