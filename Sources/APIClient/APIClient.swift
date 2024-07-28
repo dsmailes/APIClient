@@ -34,8 +34,13 @@ extension APIClientProtocol {
             request.httpMethod = endpoint.httpMethod
             
             if let body = endpoint.body {
-                let jsonData = try? JSONSerialization.data(withJSONObject: body)
-                request.httpBody = jsonData
+                do {
+                    let jsonData = try JSONEncoder().encode(body)
+                    request.httpBody = jsonData
+                } catch {
+                    observer.onError(APIError.requestFailed(description: "Encoding body failed."))
+                    return Disposables.create()
+                }
             }
             
             do {
