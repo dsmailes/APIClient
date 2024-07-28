@@ -15,7 +15,16 @@ extension APIClientProtocol {
     public func fetch<T: Codable>(type: T.Type, endpoint: EndPointProtocol) -> Observable<T> {
         return Observable<T>.create { observer in
             
-            guard let url = URL(string: baseUrl.appending(endpoint.urlSuffix)) else {
+            guard var urlComponents = URLComponents(string: baseUrl.appending(endpoint.urlSuffix)) else {
+                observer.onError(APIError.invalidConfiguration)
+                return Disposables.create()
+            }
+                        
+            if let queryItems = endpoint.queryItems {
+                urlComponents.queryItems = queryItems
+            }
+            
+            guard let url = urlComponents.url else {
                 observer.onError(APIError.invalidConfiguration)
                 return Disposables.create()
             }
