@@ -66,9 +66,7 @@ extension APIClientProtocol {
                     }
                     
                     do {
-                        let decoder = JSONDecoder()
-                        decoder.dateDecodingStrategy = .iso8601
-                        let model = try decoder.decode(T.self, from: data)
+                        let model = try JSONDecoder().decode(T.self, from: data)
                         observer.onNext(model)
                     } catch {
                         observer.onError(APIError.decodingFailure)
