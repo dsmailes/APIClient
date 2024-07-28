@@ -33,6 +33,11 @@ extension APIClientProtocol {
             request.timeoutInterval = 15
             request.httpMethod = endpoint.httpMethod
             
+            if let body = endpoint.body {
+                let jsonData = try? JSONSerialization.data(withJSONObject: body)
+                request.httpBody = jsonData
+            }
+            
             do {
                 let authenticatedRequest = try client.authenticateRequest(request)
                 

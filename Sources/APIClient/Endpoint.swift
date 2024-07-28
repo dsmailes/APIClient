@@ -11,4 +11,5 @@ public protocol EndPointProtocol {
     var urlSuffix: String { get }
     var httpMethod: String { get }
     var queryItems: [URLQueryItem]? { get }
+    var body: Encodable? { get }
 }
