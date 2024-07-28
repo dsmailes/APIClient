@@ -37,6 +37,7 @@ extension APIClientProtocol {
                 do {
                     let jsonData = try JSONEncoder().encode(body)
                     request.httpBody = jsonData
+                    request.addValue("application/json", forHTTPHeaderField: "Content-Type")
                 } catch {
                     observer.onError(APIError.requestFailed(description: "Encoding body failed."))
                     return Disposables.create()
