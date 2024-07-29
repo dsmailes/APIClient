@@ -7,12 +7,12 @@
 
 import Foundation
 
-public enum APIError: Error {
+public enum APIError: LocalizedError {
     case requestFailed(description: String)
     case decodingFailure
     case invalidConfiguration
     
-    var localizedDescription: String {
+    public var errorDescription: String? {
         switch self {
         case .requestFailed(let description):
             return NSLocalizedString("Failed with response: \(description)", comment: "Request failed error")
