@@ -14,9 +14,12 @@ public enum APIError: Error {
     
     var errorDescription: String {
         switch self {
-        case .requestFailed(let description): return "Failed with response: \(description)"
-        case .decodingFailure: return "Failed to decode data"
-        case .invalidConfiguration: return "API not configured"
+        case .requestFailed(let description):
+            return NSLocalizedString("Failed with response: \(description)", comment: "Request failed error")
+        case .decodingFailure:
+            return NSLocalizedString("Failed to decode data", comment: "Decoding failure error")
+        case .invalidConfiguration:
+            return NSLocalizedString("API not configured", comment: "Invalid configuration error")
         }
     }
 }
