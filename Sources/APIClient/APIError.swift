@@ -12,7 +12,7 @@ public enum APIError: Error {
     case decodingFailure
     case invalidConfiguration
     
-    var errorDescription: String {
+    var localizedDescription: String {
         switch self {
         case .requestFailed(let description):
             return NSLocalizedString("Failed with response: \(description)", comment: "Request failed error")
