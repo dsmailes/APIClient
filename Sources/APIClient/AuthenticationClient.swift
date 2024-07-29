@@ -10,6 +10,7 @@ import Foundation
 public protocol AuthenticationClientProtocol {
     
     func authenticateRequest(_ request: URLRequest) throws -> URLRequest
+    func removeToken() async throws
     func requestToken() async throws
     func fetchStoredToken() throws -> OAuthAccessToken
     
