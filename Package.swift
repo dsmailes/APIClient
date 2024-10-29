@@ -11,12 +11,9 @@ let package = Package(
             name: "APIClient",
             targets: ["APIClient"]),
     ],
-    dependencies: [
-        .package(url: "https://github.com/ReactiveX/RxSwift", .upToNextMajor(from: "6.7.1")),
-    ],
     targets: [
         .target(
             name: "APIClient",
-        dependencies: ["RxSwift"])
+        dependencies: [])
     ]
 )
