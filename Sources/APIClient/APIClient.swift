@@ -11,7 +11,7 @@ public protocol APIClientProtocol {
 }
 
 extension APIClientProtocol {
-    public func fetch<T: Codable>(type: T.Type, endpoint: EndPointProtocol) async throws -> T {
+    public func fetch<T: Decodable>(type: T.Type, endpoint: EndPointProtocol) async throws -> T {
         guard var urlComponents = URLComponents(string: baseUrl.appending(endpoint.urlSuffix)) else {
             throw APIError.invalidConfiguration
         }
