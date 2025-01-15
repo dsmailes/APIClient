@@ -4,7 +4,6 @@ import Foundation
 
 public protocol APIClientProtocol {
     var baseUrl: String { get }
-    var client: AuthenticationClientProtocol { get }
     var session: URLSession { get }
     
     func fetch<T: Codable>(type: T.Type, endpoint: EndPointProtocol) async throws -> T
@@ -34,23 +33,21 @@ extension APIClientProtocol {
             request.addValue("application/json", forHTTPHeaderField: "Content-Type")
         }
         
-        let authenticatedRequest = try client.authenticateRequest(request)
-        
-        let (data, response) = try await session.data(for: authenticatedRequest)
+        let (data, response) = try await session.data(for: request)
         
         guard let httpResponse = response as? HTTPURLResponse else {
-            throw APIError.requestFailed(description: "Invalid response.")
+            throw APIError.requestFailed(description: "Invalid HTTP response.")
         }
         
         guard 200..<300 ~= httpResponse.statusCode else {
-            throw APIError.requestFailed(description: "Failed with status \(httpResponse.statusCode)")
+            throw APIError.requestFailed(description: "Request failed with status \(httpResponse.statusCode)")
         }
         
         do {
             let model = try JSONDecoder().decode(T.self, from: data)
             return model
         } catch {
-            throw APIError.decodingFailure
+            throw APIError.decodingFailure(description: "Decoding failed with error \(error.localizedDescription)")
         }
     }
 }
