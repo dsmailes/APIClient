@@ -9,7 +9,15 @@ public protocol APIClientProtocol {
     func fetch<T: Codable>(type: T.Type, endpoint: EndPointProtocol) async throws -> T
 }
 
-extension APIClientProtocol {
+public class APIClient: APIClientProtocol {
+    public var baseUrl: String
+    public var session: URLSession
+    
+    public init(baseUrl: String, session: URLSession = .shared) {
+        self.baseUrl = baseUrl
+        self.session = session
+    }
+    
     public func fetch<T: Decodable>(type: T.Type, endpoint: EndPointProtocol) async throws -> T {
         guard var urlComponents = URLComponents(string: baseUrl.appending(endpoint.urlSuffix)) else {
             throw APIError.invalidConfiguration
