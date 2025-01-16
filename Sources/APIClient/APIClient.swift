@@ -9,7 +9,7 @@ public protocol APIClientProtocol {
     func fetch<T: Codable>(type: T.Type, endpoint: EndPointProtocol) async throws -> T
 }
 
-public class APIClient: APIClientProtocol {
+open class APIClient: APIClientProtocol {
     public var baseUrl: String
     public var session: URLSession
     
