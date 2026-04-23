@@ -5,7 +5,10 @@ import PackageDescription
 
 let package = Package(
     name: "APIClient",
-    platforms: [.iOS(.v13)],
+    platforms: [
+        .iOS(.v13),
+        .macOS(.v12)
+    ],
     products: [
         .library(
             name: "APIClient",

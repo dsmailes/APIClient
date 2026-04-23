@@ -1,11 +1,9 @@
 import Foundation
 
-import Foundation
-
 public protocol APIClientProtocol {
     var baseUrl: String { get }
     var client: AuthenticationClientProtocol { get }
-    var session: URLSession { get }
+    var session: URLSessionProtocol { get }
     
     func fetch<T: Codable>(type: T.Type, endpoint: EndPointProtocol) async throws -> T
 }
@@ -36,7 +34,10 @@ extension APIClientProtocol {
         
         let authenticatedRequest = try client.authenticateRequest(request)
         
-        let (data, response) = try await session.data(for: authenticatedRequest)
+        let result = try await session.dataTaskWithURL(authenticatedRequest)
+        guard let data = result.data, let response = result.urlResponse else {
+            throw APIError.requestFailed(description: "Invalid response.")
+        }
         
         guard let httpResponse = response as? HTTPURLResponse else {
             throw APIError.requestFailed(description: "Invalid response.")
